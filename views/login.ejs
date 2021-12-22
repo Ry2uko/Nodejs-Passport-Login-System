@@ -1,0 +1,40 @@
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+
+<h1 class=" display-4 text-center mt-4 mb-3">Login</h1>
+
+<% if (messages.error) { %>
+  <p class="lead text-danger text-center"><%= messages.error %></p>
+<% } %>
+
+<div class="container-fluid w-25 my-4 border border-muted rounded px-4 py-2">
+  <form action="/login" method="POST">
+    <div class="form-group my-3">
+      <label for="email" class="my-2">Email</label>
+      <input type="email" id="email" name="email"class="form-control"
+      placeholder="Enter Email" autocomplete="off" required/>
+    </div>
+    <div class="form-group my-3 ">
+      <label form="password" class="my-2">Password</label>
+      <input type="password" id="password" name="password" class="form-control"
+      placeholder="Password" autocomplete="off" required/>
+    </div>
+    <div class="form-check my-2">
+      <input type="checkbox" class="form-check-input" id="showPassword"
+      onclick="showPass()">
+      <label class="form-check-label" for="showPassword">Show Password</label>
+    </div>
+    <button type="submit" class="btn btn-primary px-3 mt-3 mb-2">Login</button>
+  </form>
+</div>
+
+<p class="mt-2 lead text-center">New user?
+  <a href="/register">Create an Account</a>
+</p>
+
+<script>
+  function showPass() {
+      const passInput = document.getElementById('password');
+      return passInput.type === "password" ? passInput.type = "text"
+      : passInput.type = "password";
+  }
+</script>
