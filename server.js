@@ -66,20 +66,23 @@ app.get('/register', checkNotAuthenticated, (req, res) => {
   res.render('register.ejs');
 });
 
-app.post('/register', checkNotAuthenticated, async (req, res) => {
-  const hashedPassword = await bcrypt.hash(req.body.password, 10);
-  const user = new User({
-    email: req.body.email,
-    password: hashedPassword
-  });
+app.post('/register', 
+  checkNotAuthenticated, 
+  checkUserExists, 
+  async (req, res) => {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const user = new User({
+      email: req.body.email,
+      password: hashedPassword
+    });
 
-  try {
-    await user.save();
-    res.redirect('/login');
-  } catch {
-    res.redirect('/register');
-  }
-});
+    try {
+      await user.save();
+      res.redirect('/login');
+    } catch {
+      res.redirect('/register');
+    }
+  });
 
 // Logout
 
@@ -104,6 +107,15 @@ function checkNotAuthenticated(req, res, next) {
   next();
 }
 
+async function checkUserExists(req, res, next) {
+  const user = await User.findOne({ email: req.body.email });
+  
+  if (user == null) {
+    return next();
+  }
+
+  res.redirect('/register');
+}
 
 const port = process.env.PORT || 3000;
 
